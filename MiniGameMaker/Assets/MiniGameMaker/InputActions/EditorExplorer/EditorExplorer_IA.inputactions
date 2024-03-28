@@ -15,13 +15,13 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Look",
-                    "type": "PassThrough",
-                    "id": "94e9ee78-2178-44ce-aee7-f92e6150fa65",
-                    "expectedControlType": "Vector2",
+                    "name": "EnableExplorer",
+                    "type": "Button",
+                    "id": "43d01799-63ce-40a7-9725-d50a6a2e0a9c",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -104,12 +104,12 @@
                 },
                 {
                     "name": "",
-                    "id": "d1ae5294-6c67-4445-a4db-80e6f91ed1d0",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
+                    "id": "922494ee-cff2-4aee-a3cc-4216430338f4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "EnableExplorer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
