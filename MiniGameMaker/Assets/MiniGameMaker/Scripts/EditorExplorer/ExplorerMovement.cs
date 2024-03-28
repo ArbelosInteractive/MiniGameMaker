@@ -68,7 +68,21 @@ public class ExplorerMovement : MonoBehaviour
             
             if (movementDir.magnitude >= 0.1f)
             {
-                
+                // Get the forward and right directions of the object
+                Vector3 forward = transform.forward;
+                Vector3 right = transform.right;
+
+                // Flatten the directions so the object doesn't move up or down
+                forward.y = 0f;
+                right.y = 0f;
+                forward.Normalize();
+                right.Normalize();
+
+                // Calculate the movement direction based on the input values and the object's rotation
+                Vector3 moveDirection = (forward * movementDir.y + right * movementDir.x).normalized;
+
+                // Apply the movement to the object
+                transform.position += moveDirection * explorerSpeed * Time.deltaTime;
             }
         }
     }
@@ -77,8 +91,8 @@ public class ExplorerMovement : MonoBehaviour
     {
         if (canMove)
         {
-            //float xAxis = cmFreelook.m_XAxis.m_InputAxisValue;
-            //float yAxis = cmFreelook.m_YAxis.m_InputAxisValue;
+            float xAxis = cmFreelook.m_XAxis.m_InputAxisValue;
+            float yAxis = cmFreelook.m_YAxis.m_InputAxisValue;
 
             //Debug.Log($"CM XAxis: {xAxis} , CM YAxis: {yAxis}");
 
