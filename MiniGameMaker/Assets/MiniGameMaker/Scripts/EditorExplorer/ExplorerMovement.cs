@@ -68,8 +68,7 @@ public class ExplorerMovement : MonoBehaviour
             
             if (movementDir.magnitude >= 0.1f)
             {
-                Vector3 moveDirection = CalculateMovement(movementDir);
-                transform.position += moveDirection * explorerSpeed * Time.deltaTime;
+                
             }
         }
     }
@@ -78,33 +77,20 @@ public class ExplorerMovement : MonoBehaviour
     {
         if (canMove)
         {
-            //Debug.Log($"{Input.GetAxis(cmFreelook.m_YAxis.m_InputAxisName)},{Input.GetAxis(cmFreelook.m_XAxis.m_InputAxisName)}");
-            Vector3 cameraInput = new Vector3(Input.GetAxis(cmFreelook.m_YAxis.m_InputAxisName),
-                Input.GetAxis(cmFreelook.m_XAxis.m_InputAxisName), 0);
+            //float xAxis = cmFreelook.m_XAxis.m_InputAxisValue;
+            //float yAxis = cmFreelook.m_YAxis.m_InputAxisValue;
 
-            transform.Rotate(cameraInput * sensitivity * Time.deltaTime * 50);
-            Vector3 eulerRotation = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, 0);
-            
+            //Debug.Log($"CM XAxis: {xAxis} , CM YAxis: {yAxis}");
+
+            if (xAxis != 0 | yAxis != 0)
+            {
+                // Get the rotation of the camera
+                Quaternion cameraRotation = explorerCamera.transform.rotation;
+
+                // Set the rotation of the object to match the camera's rotation
+                transform.rotation = cameraRotation;
+            }
         }
     }
 
-    private Vector3 CalculateMovement(Vector3 inputDir)
-    {
-        // Get the forward and right vectors of the camera
-        Vector3 cameraForward = explorerCamera.transform.forward;
-        Vector3 cameraRight = explorerCamera.transform.right;
-
-        // Flatten the vectors so the player doesn't move up or down
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-
-        // Normalize the vectors to avoid faster movement diagonally
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        // Calculate the move direction based on camera orientation
-        Vector3 moveDirection = cameraForward * inputDir.z + cameraRight * inputDir.x;
-        return moveDirection.normalized;
-    }
 }
