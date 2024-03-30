@@ -12,6 +12,7 @@ public class ExplorerMovement : MonoBehaviour
     
     [SerializeField] private float explorerSpeed;
     [SerializeField] private float sensitivity;
+    [SerializeField] private CharacterController controller;
     
     private float turnSmoothTime = 0.1f;
     private float turnSmoothVelocity;
@@ -76,7 +77,7 @@ public class ExplorerMovement : MonoBehaviour
                 moveDirection = transform.TransformDirection(moveDirection);
 
                 // Apply the movement to the object
-                transform.position += moveDirection.normalized * explorerSpeed * Time.deltaTime;
+                controller.Move(moveDirection.normalized * explorerSpeed * Time.deltaTime);
             }
         }
     }
