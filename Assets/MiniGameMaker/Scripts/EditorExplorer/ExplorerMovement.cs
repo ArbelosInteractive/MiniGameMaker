@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using UnityEditor.Il2Cpp;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,13 +10,11 @@ public class ExplorerMovement : MonoBehaviour
     private PlayerInput explorerInputAction;
     private InputAction moveAction;
     private InputAction enableExplorerAction;
+    private InputAction zoomAction;
     
     [SerializeField] private float explorerSpeed;
     [SerializeField] private float sensitivity;
     [SerializeField] private CharacterController controller;
-    
-    private float turnSmoothTime = 0.1f;
-    private float turnSmoothVelocity;
 
     [SerializeField]
     private Camera explorerCamera;
@@ -23,16 +22,23 @@ public class ExplorerMovement : MonoBehaviour
     [SerializeField] private CinemachineFreeLook cmFreelook;
 
     private bool canMove = false;
+    private float zoomValue = 0;
     
     
     // Start is called before the first frame update
     void Start()
     {
+
         explorerInputAction = GetComponent<PlayerInput>();
+
         moveAction = explorerInputAction.actions.FindAction("Move");
         enableExplorerAction = explorerInputAction.actions.FindAction("EnableExplorer");
+        zoomAction = explorerInputAction.actions.FindAction("Zoom");
+
         enableExplorerAction.performed += DisableMovement;
         enableExplorerAction.started += EnableMovement;
+        zoomAction.performed += ReadZoomValue;
+
         cmFreelook.enabled = false;
     }
 
@@ -41,6 +47,7 @@ public class ExplorerMovement : MonoBehaviour
     {
         RotateExplorer();
         MoveExplorer();
+        HandleCameraZoom();
     }
 
 
@@ -102,4 +109,30 @@ public class ExplorerMovement : MonoBehaviour
         }
     }
 
+    void HandleCameraZoom()
+    {
+        if(canMove)
+        {
+            //Can only zoom if not moving
+            if(zoomValue > 0)
+            {
+                Debug.Log("Scrolling Up");
+                cmFreelook.m_Orbits[0].m_Radius -= 1f;
+                cmFreelook.m_Orbits[1].m_Radius -= 1f;
+                cmFreelook.m_Orbits[2].m_Radius -= 1f;
+            }
+            else if(zoomValue < 0)
+            {
+                Debug.Log("Scrolling Down");
+                cmFreelook.m_Orbits[0].m_Radius += 1f;
+                cmFreelook.m_Orbits[1].m_Radius += 1f;
+                cmFreelook.m_Orbits[2].m_Radius += 1f;
+            }
+        }
+    }
+
+    void ReadZoomValue(InputAction.CallbackContext callbackContext)
+    {
+        zoomValue = callbackContext.ReadValue<float>();
+    }
 }
