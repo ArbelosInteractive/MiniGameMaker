@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/MiniGameMaker/Scenes/AuthorScene.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
