@@ -163,6 +163,8 @@ MonoBehaviour:
   explorerSpeed: 15
   sensitivity: 1
   controller: {fileID: 6786260682836594268}
+  minZoom: 8
+  maxZoom: 28
   explorerCamera: {fileID: 0}
   cmFreelook: {fileID: 0}
 --- !u!143 &6786260682836594268

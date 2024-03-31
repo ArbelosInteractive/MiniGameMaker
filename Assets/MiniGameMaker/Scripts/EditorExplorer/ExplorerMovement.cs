@@ -15,6 +15,8 @@ public class ExplorerMovement : MonoBehaviour
     [SerializeField] private float explorerSpeed;
     [SerializeField] private float sensitivity;
     [SerializeField] private CharacterController controller;
+    [SerializeField] private float minZoom;
+    [SerializeField] private float maxZoom;
 
     [SerializeField]
     private Camera explorerCamera;
@@ -114,20 +116,24 @@ public class ExplorerMovement : MonoBehaviour
         if(canMove)
         {
             //Can only zoom if not moving
-            if(zoomValue > 0)
+            if (zoomValue > 0)
             {
-                Debug.Log("Scrolling Up");
-                cmFreelook.m_Orbits[0].m_Radius -= 1f;
-                cmFreelook.m_Orbits[1].m_Radius -= 1f;
-                cmFreelook.m_Orbits[2].m_Radius -= 1f;
+                if (cmFreelook.m_Orbits[1].m_Radius > minZoom)
+                {
+                    cmFreelook.m_Orbits[0].m_Radius -= 1f;
+                    cmFreelook.m_Orbits[1].m_Radius -= 1f;
+                    cmFreelook.m_Orbits[2].m_Radius -= 1f;
+                }     
             }
-            else if(zoomValue < 0)
+            else if (zoomValue < 0)
             {
-                Debug.Log("Scrolling Down");
-                cmFreelook.m_Orbits[0].m_Radius += 1f;
-                cmFreelook.m_Orbits[1].m_Radius += 1f;
-                cmFreelook.m_Orbits[2].m_Radius += 1f;
-            }
+                if(cmFreelook.m_Orbits[1].m_Radius < maxZoom)
+                {
+                    cmFreelook.m_Orbits[0].m_Radius += 1f;
+                    cmFreelook.m_Orbits[1].m_Radius += 1f;
+                    cmFreelook.m_Orbits[2].m_Radius += 1f;
+                }
+            }    
         }
     }
 
