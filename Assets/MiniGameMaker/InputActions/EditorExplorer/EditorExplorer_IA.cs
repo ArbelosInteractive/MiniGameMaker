@@ -37,6 +37,15 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""34f61362-92b4-4143-9323-56d51a7ea253"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""EnableExplorer"",
                     ""type"": ""Button"",
                     ""id"": ""43d01799-63ce-40a7-9725-d50a6a2e0a9c"",
@@ -154,6 +163,17 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""732e1adb-788a-4c2e-b9d3-fa8dc9aeb962"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -163,6 +183,7 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
+        m_Movement_Sprint = m_Movement.FindAction("Sprint", throwIfNotFound: true);
         m_Movement_EnableExplorer = m_Movement.FindAction("EnableExplorer", throwIfNotFound: true);
         m_Movement_Zoom = m_Movement.FindAction("Zoom", throwIfNotFound: true);
     }
@@ -227,6 +248,7 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Movement;
     private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
     private readonly InputAction m_Movement_Move;
+    private readonly InputAction m_Movement_Sprint;
     private readonly InputAction m_Movement_EnableExplorer;
     private readonly InputAction m_Movement_Zoom;
     public struct MovementActions
@@ -234,6 +256,7 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
         private @EditorExplorer_IA m_Wrapper;
         public MovementActions(@EditorExplorer_IA wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Movement_Move;
+        public InputAction @Sprint => m_Wrapper.m_Movement_Sprint;
         public InputAction @EnableExplorer => m_Wrapper.m_Movement_EnableExplorer;
         public InputAction @Zoom => m_Wrapper.m_Movement_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
@@ -248,6 +271,9 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
             @EnableExplorer.started += instance.OnEnableExplorer;
             @EnableExplorer.performed += instance.OnEnableExplorer;
             @EnableExplorer.canceled += instance.OnEnableExplorer;
@@ -261,6 +287,9 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
             @EnableExplorer.started -= instance.OnEnableExplorer;
             @EnableExplorer.performed -= instance.OnEnableExplorer;
             @EnableExplorer.canceled -= instance.OnEnableExplorer;
@@ -287,6 +316,7 @@ public partial class @EditorExplorer_IA: IInputActionCollection2, IDisposable
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
         void OnEnableExplorer(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
     }

@@ -11,8 +11,10 @@ public class ExplorerMovement : MonoBehaviour
     private InputAction moveAction;
     private InputAction enableExplorerAction;
     private InputAction zoomAction;
+    private InputAction sprintAction;
     
     [SerializeField] private float explorerSpeed;
+    [SerializeField] private float sprintMultiplier;
     [SerializeField] private float sensitivity;
     [SerializeField] private CharacterController controller;
     [SerializeField] private float minZoom;
@@ -24,6 +26,7 @@ public class ExplorerMovement : MonoBehaviour
     [SerializeField] private CinemachineFreeLook cmFreelook;
 
     private bool canMove = false;
+    private bool canSprint = false;
     private float zoomValue = 0;
     
     
@@ -36,10 +39,13 @@ public class ExplorerMovement : MonoBehaviour
         moveAction = explorerInputAction.actions.FindAction("Move");
         enableExplorerAction = explorerInputAction.actions.FindAction("EnableExplorer");
         zoomAction = explorerInputAction.actions.FindAction("Zoom");
+        sprintAction = explorerInputAction.actions.FindAction("Sprint");
 
         enableExplorerAction.performed += DisableMovement;
         enableExplorerAction.started += EnableMovement;
         zoomAction.performed += ReadZoomValue;
+        sprintAction.performed += DisableSprint;
+        sprintAction.started += EnableSprint;
 
         cmFreelook.enabled = false;
     }
@@ -70,6 +76,16 @@ public class ExplorerMovement : MonoBehaviour
         Cursor.visible = true;
     }
 
+    void EnableSprint(InputAction.CallbackContext callbackContext)
+    {
+        canSprint = true;
+    }
+
+    void DisableSprint(InputAction.CallbackContext callbackContext)
+    {
+        canSprint = false;
+    }
+
     void MoveExplorer()
     {
         if (canMove)
@@ -85,8 +101,16 @@ public class ExplorerMovement : MonoBehaviour
                 // Rotate the movement direction to match the object's rotation
                 moveDirection = transform.TransformDirection(moveDirection);
 
-                // Apply the movement to the object
-                controller.Move(moveDirection.normalized * explorerSpeed * Time.deltaTime);
+                if(canSprint)
+                {
+                    // Apply the movement to the object with sprint speed
+                    controller.Move(moveDirection.normalized * explorerSpeed * sprintMultiplier * Time.deltaTime);
+                }
+                else
+                {
+                    // Apply the movement to the object with normal speed
+                    controller.Move(moveDirection.normalized * explorerSpeed * Time.deltaTime);
+                }
             }
         }
     }
